@@ -1,0 +1,22 @@
+version: "3"
+networks:
+  frontend:
+volumes:
+  productdata:  
+services:
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    networks:
+      - frontend
+  loadbalancer:
+    image: dockercloud/haproxy:1.2.1
+    ports:
+      - "80:80"
+    links:
+      - app
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - frontend
